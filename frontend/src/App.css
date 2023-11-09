@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -14,25 +14,81 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #fef3df;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  max-width: 1200px;
+  min-width: 100vw;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: relative;
+  overflow: hidden;
+  background-image: url("../public/waill-wide.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.App-header-text {
+  font-size: 70px;
+  color: #72cad8;
+  line-height: 75px;
+  margin: 0px;
+  margin-bottom: 10px
+}
+
+.App-header-p {
+  color: #72cad8;
+  font-size: 24px;
+  margin: 0px;
+  margin-bottom: 30px
+}
+
+.App-header-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 80px;
+  width: 40vw;
+}
+
+.primary-button {
+  border: none;
+  padding: 10px 20px 10px 20px;
+  background-color: #277888;
+  border-radius: 10px;
+  color: #eafff3;
+  transition: background-color .05s linear;
+  cursor: pointer;
+  font-family: "DMSans";
+  text-decoration: none;
+  font-size: 18px;
+}
+.primary-button:hover {
+  background-color: #48b2cf;
+}
+
+.secondary-button {
+  border: none;
+  padding: 8px 18px 8px 18px;
+  background-color: rgba(0,0,0,0);
+  border-radius: 10px;
+  color: #277888;
+  transition: background-color .05s linear;
+  transition: border .05s linear;
+  cursor: pointer;
+  border: 2px solid #277888;
+  font-family: "DMSans";
+  text-decoration: none;
+  font-size: 18px;
+}
+.secondary-button:hover {
+  background-color: #eafff3;
+  border: 2px solid #eafff3;
+}
+
+.highlighted-text {
+  color: #277888;
 }
 
 .App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  color: #48b2cf;
 }
