@@ -37,3 +37,12 @@ frontend/.yarn-integrity
 # ENV
 frontend/.env
 backend/.env
+
+# VENV
+backend/venv
+
+# pychache
+backend/__pycache__
+
+# .idea
+backend/.idea
