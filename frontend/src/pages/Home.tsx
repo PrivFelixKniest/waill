@@ -33,7 +33,7 @@ function Home() {
         ) : (
           <>
             <a className="primary-button" href="/chat" style={{marginRight: "5px"}}>Chat</a>
-            <button className="secondary-button" onClick={() => logout()}>Sign Out</button>
+            <button className="secondary-button" onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>Sign Out</button>
           </>
         )}
       </div>
