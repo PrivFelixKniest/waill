@@ -3,6 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 function Home() {
   const { logout, loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+
   return (
     <header className="App-header">
       {/*<img src="waill-wide.png" alt="well, logo of the app" style={{
