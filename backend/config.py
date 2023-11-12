@@ -10,6 +10,9 @@ class Settings(BaseSettings):
 
     openai_api_key: str
 
+    supabase_key: str
+    supabase_url: str
+
     class Config:
         env_file = ".env"
 

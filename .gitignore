@@ -46,3 +46,6 @@ backend/__pycache__
 
 # .idea
 backend/.idea
+
+# db
+backend/alembic.ini
