@@ -3,15 +3,15 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    auth0_domain: str
-    auth0_api_audience: str
-    auth0_issuer: str
-    auth0_algorithms: str
+    AUTH0_DOMAIN: str
+    AUTH0_API_AUDIENCE: str
+    AUTH0_ISSUER: str
+    AUTH0_ALGORITHMS: str
 
-    openai_api_key: str
+    OPENAI_API_KEY: str
 
-    supabase_key: str
-    supabase_url: str
+    SUPABASE_KEY: str
+    SUPABASE_URL: str
 
     class Config:
         env_file = ".env"
