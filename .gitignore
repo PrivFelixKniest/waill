@@ -41,11 +41,14 @@ backend/.env
 # VENV
 backend/venv
 
-# pychache
-backend/__pycache__
-
 # .idea
 backend/.idea
 
 # db
 backend/alembic.ini
+
+#pycache
+__pycache__/
+*.pyc
+/dist/
+backend/__pycache__/

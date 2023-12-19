@@ -10,5 +10,5 @@ auth = VerifyToken()
 
 
 @router.post("/query", response_model=QueryResponse)
-def read_root(query: QuerySchema, auth_result = Security(auth.verify)):
+def read_root(query: QuerySchema, _auth_result = Security(auth.verify)):
     return get_query_answer(query)
