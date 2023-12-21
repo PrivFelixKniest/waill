@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { DARKTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
 import { postOpenaiKey } from "../api/userInformation";
@@ -61,14 +61,14 @@ export const SettingsPage = () => {
       </Box>
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
-          <Box>Openai API Key</Box>
+          <Box>Default OpenAI API Key</Box>
           <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
             This key is necessary so that this application is able to connect to
-            your Openai account and use your GPT Access. For the same reason you
-            will be able to see your billing information inside the Openai
+            your OpenAI account and use your GPT Access. For the same reason you
+            will be able to see your billing information inside the OpenAI
             dashboard.
             <br />
-            Learn how to generate an Openai API Key{" "}
+            Learn how to generate an OpenAI API Key{" "}
             <a
               href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwj4kJX1q5-DAxUmnf0HHWeNBXYQFnoECA4QAw&url=https%3A%2F%2Fplatform.openai.com%2Fdocs%2Fquickstart%23%3A~%3Atext%3DFirst%252C%2520create%2520an%2520OpenAI%2520account%2Cnot%2520share%2520it%2520with%2520anyone.&usg=AOvVaw3lfqD91hEjFi8wl23Wjphg&opi=89978449"
               target="_blank"
@@ -87,16 +87,18 @@ export const SettingsPage = () => {
         </Box>
         <Box sx={{ width: "100%", display: "flex", gap: "5px" }}>
           <input
-            type="text"
+            type="password"
             placeholder="sk-..."
             className="input-light"
             style={{ flexGrow: "1" }}
             value={openaiKey}
             onChange={(e: any) => dispatch(setOpenaiKey(e.target.value))}
           />
-          <IconButton onClick={handleKeySave}>
-            <CheckRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
-          </IconButton>
+          <Tooltip arrow title="Save">
+            <IconButton onClick={handleKeySave}>
+              <CheckRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Box>
 

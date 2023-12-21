@@ -28,9 +28,14 @@ export const OverlayModal = ({
           borderRadius: "15px",
           maxHeight: "80vh",
           maxWidth: "80vw",
+          overflowY: "scroll",
         }}
       >
-        <Box sx={{ position: "relative" }}>
+        <Box
+          sx={{
+            position: "relative",
+          }}
+        >
           <IconButton
             sx={{
               position: "absolute",

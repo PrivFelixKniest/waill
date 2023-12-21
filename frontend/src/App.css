@@ -143,19 +143,61 @@
 
 .input-light::-webkit-input-placeholder {
   /* WebKit browsers */
-  color: #277888;
+  color: #9dc4cc;
 }
 .input-light:-moz-placeholder {
   /* Mozilla Firefox 4 to 18 */
-  color: #277888;
+  color: #9dc4cc;
 }
 .input-light::-moz-placeholder {
   /* Mozilla Firefox 19+ */
-  color: #277888;
+  color: #9dc4cc;
 }
 .input-light:-ms-input-placeholder {
   /* Internet Explorer 10+ */
+  color: #9dc4cc;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(208, 232, 236, 0);
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #a7d3db;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #90bdc5;
+}
+
+.well-button {
+  border: none;
+  padding: 8px 18px 8px 18px;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 10px;
   color: #277888;
+  transition: background-color 0.05s linear;
+  transition: border 0.05s linear;
+  cursor: pointer;
+  border: 2px dashed #277888;
+  font-family: "DMSans";
+  text-decoration: none;
+  font-size: 18px;
+}
+.well-button:hover {
+  background-color: #eafff3;
+  border: 2px dashed #eafff3;
 }
 
 @media only screen and (max-width: 899px) {

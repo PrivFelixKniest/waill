@@ -1,11 +1,8 @@
-from datetime import datetime
-from typing import List
-from typing import Optional
 from sqlalchemy import Column, DateTime, func
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
+from enum import Enum
 
 
 class Base(DeclarativeBase):
@@ -30,7 +27,23 @@ class User(Base, BaseModel):
 class Well(Base, BaseModel):
     __tablename__ = "well"
     id: Mapped[int] = mapped_column(primary_key=True)
+    assistant_id: Mapped[str]
+    thread_id: Mapped[str]
     name: Mapped[str]
     instructions: Mapped[str]
+    openai_api_key: Mapped[str]
     model: Mapped[str]
     user_id: Mapped[int]
+
+
+class Creator(str, Enum):
+    assistant = 'assistant'
+    user = 'user'
+
+
+class Message(Base, BaseModel):
+    __tablename__ = "message"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    well_id: Mapped[int]
+    creator: Mapped[Creator]
+    content: Mapped[str]

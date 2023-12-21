@@ -6,14 +6,17 @@ import { ChatInput } from "../components/ChatInput";
 import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
 import { Sidebar } from "../components/Sidebar";
 import { getUser } from "../api/userInformation";
-import { setOpenaiKey } from "../redux/slices/chatSlice";
+import { setOpenaiKey, setWells } from "../redux/slices/chatSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
+import { WellsBar } from "../components/WellsBar";
+import { getWells } from "../api/wells";
 
 function Chat() {
   const dispatch = useDispatch();
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [userLoading, setUserLoading] = useState(true);
+  const [wellsLoading, setWellsLoading] = useState(true);
 
   useEffect(() => {
     if (!isLoading) {
@@ -29,10 +32,22 @@ function Chat() {
                 .then((resp: any) => {
                   dispatch(setOpenaiKey(resp.openai_api_key));
                   setUserLoading(false);
+                  setWellsLoading(true);
+                  getWells(authToken)
+                    .then((resp) => {
+                      setWellsLoading(false);
+                      dispatch(setWells(resp));
+                    })
+                    .catch((err: any) => {
+                      setWellsLoading(false);
+                      toast.error(
+                        "There was an error fetching your wells, please try again later."
+                      );
+                    });
                 })
                 .catch((err: any) => {
                   toast.error(
-                    "There was an error fetching your user data, please try again later."
+                    "There was an error fetching your user data, please try again."
                   );
                 });
             })
@@ -41,7 +56,7 @@ function Chat() {
                 "There was an error getting your authorization token, please try again later."
               );
             });
-        }, 500);
+        }, 750);
       }
     }
   }, [isAuthenticated, isLoading]);
@@ -161,11 +176,7 @@ function Chat() {
                 <ChatInput />
               </Box>
             </Box>
-            <Box
-              sx={{ width: "250px", backgroundColor: SAND, padding: "20px" }}
-            >
-              <Box sx={{ fontSize: "20px" }}>Wells</Box>
-            </Box>
+            <WellsBar wellsLoading={wellsLoading} />
           </Box>
         </>
       )}
