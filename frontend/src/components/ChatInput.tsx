@@ -1,5 +1,13 @@
 import { Box } from "@mui/material";
-import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
+import {
+  DARKHIGHLIGHTTEAL,
+  DARKTEAL,
+  HIGHLIGHTTEAL,
+  LIGHTHIGHLIGHTTEAL,
+  LIGHTSAND,
+  LIGHTTEAL,
+  SAND,
+} from "../colors";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
 
@@ -13,22 +21,23 @@ export const ChatInput = () => {
     line-height: 1.5;
     padding: 12px 17px;
     border-radius: 8px;
-    color: ${LIGHTSAND};
-    background: ${DARKTEAL};
-    border: none;
+    color: ${DARKTEAL};
+    background: ${LIGHTTEAL};
+    border: 2px solid ${LIGHTHIGHLIGHTTEAL};
     resize: none;
+    transition: border .2s ease;
 
     ::placeholder {
-      color: ${LIGHTTEAL};
+      color: ${DARKTEAL};
       opacity: 1; /* Firefox */
     }
 
     &:hover {
-      border-color: ${LIGHTTEAL};
+      border-color: ${HIGHLIGHTTEAL};
     }
 
     &:focus {
-      border-color: ${LIGHTTEAL};
+      border-color: ${DARKHIGHLIGHTTEAL};
     }
 
     // firefox

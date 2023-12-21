@@ -1,9 +1,12 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI, Security
 from fastapi.security import HTTPBearer
 from utils import VerifyToken
 from routers.query_document import router as query_document_router
 from routers.user_information import router as user_information_router
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 
@@ -14,6 +17,20 @@ load_dotenv()
 
 app = FastAPI()
 auth = VerifyToken()
+
+
+origins = [
+    os.getenv("ALLOWED_ORIGIN"),
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(query_document_router)
 app.include_router(user_information_router)

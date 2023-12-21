@@ -1,18 +1,19 @@
-from fastapi import APIRouter, Security, HTTPException
+from fastapi import APIRouter, Security
 
-from db.database import DB_Session
-from db.database_schemas import User
-from routers.user_information_schemas import GetUserResponse
+from routers.auth_schema import VerifySchema
+from routers.user_information_schemas import PostKeySchema, PostKeyResponse, GetUserResponse
+from services.user_information import post_key, get_user
 from utils import VerifyToken
 
 router = APIRouter()
 auth = VerifyToken()
 
 
-@router.get("/user/{auth0_user_id}", response_model=GetUserResponse)
-def read_root(auth0_user_id: str, _auth_result = Security(auth.verify)):
-    with DB_Session.begin() as db:
-        user = db.query(User).where(User.auth0_user_id == auth0_user_id).first()
-        if user is None:
-            raise HTTPException(status_code=404, detail="User not found")
-        return {"id": user.id, "auth0_user_id": user.auth0_user_id, "openai_api_key": user.openai_api_key, "created_at": user.created_at, "updated_at": user.updated_at}
+@router.get("/user", response_model=GetUserResponse)
+def post_key_route(_auth_result: VerifySchema = Security(auth.verify)):
+    return get_user(_auth_result=_auth_result)
+
+
+@router.post("/user/openai-key", response_model=PostKeyResponse)
+def post_key_route(key_body: PostKeySchema, _auth_result: VerifySchema = Security(auth.verify)):
+    return post_key(key_body=key_body, _auth_result=_auth_result)

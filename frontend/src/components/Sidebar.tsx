@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Box } from "@mui/material";
-import { DARKTEAL, LIGHTSAND, LIGHTTEAL } from "../colors";
+import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import { OverlayModal } from "./OverlayModal";
 import { SettingsPage } from "./SettingsPage";
@@ -16,7 +16,7 @@ export const Sidebar = () => {
     <Box
       sx={{
         width: "250px",
-        backgroundColor: LIGHTSAND,
+        backgroundColor: SAND,
         display: "flex",
         flexDirection: "column",
       }}
@@ -45,16 +45,18 @@ export const Sidebar = () => {
           />
           <Box
             sx={{
-              whitespace: "nowrap",
               overflow: "hidden",
               height: "100%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              fontSize: "15px",
+              fontSize: "16px",
+              lineHeight: "16px",
             }}
           >
-            {user?.name}
+            {user?.nickname}
+            <br />
+            <span style={{ opacity: ".8" }}>{user?.name}</span>
           </Box>
           <Box
             sx={{

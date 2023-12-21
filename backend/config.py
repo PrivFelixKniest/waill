@@ -10,6 +10,8 @@ class Settings(BaseSettings):
 
     openai_api_key: str
 
+    allowed_origin: str
+
     database_url: str
 
     class Config:

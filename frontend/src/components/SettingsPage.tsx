@@ -1,9 +1,38 @@
-import { Box } from "@mui/material";
-import { DARKTEAL, LIGHTTEAL, SAND } from "../colors";
+import { Box, IconButton } from "@mui/material";
+import { DARKTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
+import { postOpenaiKey } from "../api/userInformation";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { setOpenaiKey } from "../redux/slices/chatSlice";
+import { toast } from "sonner";
 
 export const SettingsPage = () => {
-  const { logout, user } = useAuth0();
+  const dispatch = useDispatch();
+  const { logout, user, getAccessTokenSilently } = useAuth0();
+  const openaiKey = useSelector((state: RootState) => state.chat.openaiKey);
+
+  const handleKeySave = () => {
+    getAccessTokenSilently()
+      .then((authToken: string) => {
+        postOpenaiKey(openaiKey, authToken)
+          .then((resp: any) => {
+            toast.success("Saved");
+          })
+          .catch((err: any) => {
+            toast.error(
+              "There was an error saving your key, please try again later."
+            );
+          });
+      })
+      .catch((err: any) => {
+        toast.error(
+          "There was an error getting your authorization token, please try again later."
+        );
+      });
+  };
+
   return (
     <Box sx={{ color: DARKTEAL }}>
       <Box sx={{ fontSize: "20px", marginBottom: "20px" }}>
@@ -33,16 +62,15 @@ export const SettingsPage = () => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>Openai API Key</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px" }}>
+          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
             This key is necessary so that this application is able to connect to
-            your Openai account and use your GPT Access.
-            <br />
-            For the same reason you will be able to see your billing information
-            inside the Openai dashboard.
+            your Openai account and use your GPT Access. For the same reason you
+            will be able to see your billing information inside the Openai
+            dashboard.
             <br />
             Learn how to generate an Openai API Key{" "}
             <a
-              href="https://gptforwork.com/help/gpt-for-docs/setup/create-openai-api-key"
+              href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwj4kJX1q5-DAxUmnf0HHWeNBXYQFnoECA4QAw&url=https%3A%2F%2Fplatform.openai.com%2Fdocs%2Fquickstart%23%3A~%3Atext%3DFirst%252C%2520create%2520an%2520OpenAI%2520account%2Cnot%2520share%2520it%2520with%2520anyone.&usg=AOvVaw3lfqD91hEjFi8wl23Wjphg&opi=89978449"
               target="_blank"
               rel="noreferrer"
               className="App-link"
@@ -50,10 +78,26 @@ export const SettingsPage = () => {
               here
             </a>
             .
+            <br />
+            Please note that Waill will only store your key in order to allow
+            you to use the application. We still highly advise periodically
+            checking your billing information for suspicious activity, even when
+            not using Waill.
           </Box>
         </Box>
-
-        <input type="text" placeholder="sk-..." className="input-light" />
+        <Box sx={{ width: "100%", display: "flex", gap: "5px" }}>
+          <input
+            type="text"
+            placeholder="sk-..."
+            className="input-light"
+            style={{ flexGrow: "1" }}
+            value={openaiKey}
+            onChange={(e: any) => dispatch(setOpenaiKey(e.target.value))}
+          />
+          <IconButton onClick={handleKeySave}>
+            <CheckRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
+          </IconButton>
+        </Box>
       </Box>
 
       <button
