@@ -166,6 +166,28 @@ function Chat() {
         </Box>
       </Box>
     );
+
+    return (
+      <Box
+        style={{
+          width: "100vw",
+          height: "100vh",
+          position: "relative",
+          backgroundColor: "#fef6ea",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          Something Went Wrong...
+        </div>
+      </Box>
+    );
   }
 }
 
