@@ -6,11 +6,16 @@ import { ChatInput } from "../components/ChatInput";
 import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
 import { Sidebar } from "../components/Sidebar";
 import { getUser } from "../api/userInformation";
-import { setOpenaiKey, setWells } from "../redux/slices/chatSlice";
+import {
+  setOpenaiKey,
+  setSelectedWellId,
+  setWells,
+} from "../redux/slices/chatSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { WellsBar } from "../components/WellsBar";
 import { getWells } from "../api/wells";
+import { wellType } from "../types/chat";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -34,9 +39,12 @@ function Chat() {
                   setUserLoading(false);
                   setWellsLoading(true);
                   getWells(authToken)
-                    .then((resp) => {
+                    .then((resp: wellType[]) => {
                       setWellsLoading(false);
                       dispatch(setWells(resp));
+                      if (resp.length !== 0) {
+                        dispatch(setSelectedWellId(resp[0].id));
+                      }
                     })
                     .catch((err: any) => {
                       setWellsLoading(false);
@@ -172,7 +180,7 @@ function Chat() {
               <Box sx={{ flexGrow: "1" }}>
                 <ChatMessages />
               </Box>
-              <Box sx={{ height: "200px" }}>
+              <Box>
                 <ChatInput />
               </Box>
             </Box>

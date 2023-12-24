@@ -10,7 +10,7 @@ import { OverlayModal } from "./OverlayModal";
 import { CreateWellPage } from "./CreateWellPage";
 import { useAuth0 } from "@auth0/auth0-react";
 import { deleteWell } from "../api/wells";
-import { setWells } from "../redux/slices/chatSlice";
+import { setSelectedWellId, setWells } from "../redux/slices/chatSlice";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
@@ -34,6 +34,7 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
           .then((resp: any) => {
             const newWells = wells.filter((well) => well.id !== id);
             dispatch(setWells(newWells));
+            dispatch(setSelectedWellId(null));
             toast.success("Successfully deleted");
             setDeleteWellLoading(false);
           })
@@ -91,6 +92,7 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
                         width: "100%",
                         whiteSpace: "nowrap",
                       }}
+                      onClick={() => dispatch(setSelectedWellId(well.id))}
                     >
                       <span style={{ fontSize: "17px" }}>{well.name}</span>
                       <br />

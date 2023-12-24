@@ -7,6 +7,8 @@ from db.database_schemas import User, Well
 
 from openai import OpenAI
 
+from services.encryption import encrypt, decrypt
+
 
 def post_well(well: PostWellSchema, _auth_result: VerifySchema):
     try:
@@ -31,7 +33,7 @@ def post_well(well: PostWellSchema, _auth_result: VerifySchema):
 
             thread = client.beta.threads.create()
 
-            new_well = Well(name=well.name, openai_api_key=well.openai_api_key, instructions=well.instructions, model=well.model, user_id=user.id, assistant_id=assistant.id, thread_id=thread.id)
+            new_well = Well(name=well.name, openai_api_key=encrypt(well.openai_api_key), instructions=well.instructions, model=well.model, user_id=user.id, assistant_id=assistant.id, thread_id=thread.id)
             db.add(new_well)
             db.flush()
             return {
@@ -44,7 +46,6 @@ def post_well(well: PostWellSchema, _auth_result: VerifySchema):
                 "updated_at": new_well.updated_at
             }
     except Exception as e:
-        print(e)
         if "Connection error." in str(e) or "Incorrect API key provided" in str(e):
             raise HTTPException(status_code=422, detail="Creating an OpenAI client was unsuccessful, most likely due to an incorrect key")
         if "The requested model" in str(e) and "does not exist." in str(e):
@@ -75,9 +76,12 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
             if well is None:
                 raise Exception("Well is None Error")
 
+            # Authorization Check
+            if user.id != well.user_id:
+                raise Exception("Unauthorized Access Key Error")
 
             # Create client
-            client = OpenAI(api_key=well.openai_api_key)
+            client = OpenAI(api_key=decrypt(well.openai_api_key))
 
             try:
                 client.beta.assistants.delete(assistant_id=well.assistant_id)
@@ -97,7 +101,6 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
 
             db.delete(well)
             db.flush()
-            print(well)
             return {
                 "id": well.id,
                 "name": well.name,
@@ -108,7 +111,6 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
                 "updated_at": well.updated_at
             }
     except Exception as e:
-        print(e)
         if "Connection error." in str(e):
             raise HTTPException(status_code=422, detail="Creating an OpenAI client was unsuccessful, most likely due to an incorrect key")
         if "The requested model" in str(e) and "does not exist." in str(e):
@@ -122,6 +124,8 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
             )
         if "Init DB Fetch Error" in str(e):
             raise HTTPException(status_code=424, detail="The initial database fetch for the user information failed, failed dependency.")
+        if "Unauthorized Access Key Error" in str(e):
+            raise HTTPException(status_code=403, detail="Your Access Token does not allow access to this Well.")
 
         raise HTTPException(status_code=500, detail="Internal Server Error")
 

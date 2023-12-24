@@ -7,6 +7,7 @@ from utils import VerifyToken
 from routers.query_document import router as query_document_router
 from routers.user_information import router as user_information_router
 from routers.well import router as well_router
+from routers.files import router as files_router
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -36,6 +37,7 @@ app.add_middleware(
 app.include_router(query_document_router)
 app.include_router(user_information_router)
 app.include_router(well_router)
+app.include_router(files_router)
 
 
 @app.get("/")

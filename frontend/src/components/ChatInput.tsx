@@ -1,20 +1,28 @@
-import { Box } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import {
   DARKHIGHLIGHTTEAL,
   DARKTEAL,
   HIGHLIGHTTEAL,
   LIGHTHIGHLIGHTTEAL,
-  LIGHTSAND,
   LIGHTTEAL,
-  SAND,
 } from "../colors";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import { styled } from "@mui/system";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
+import { OverlayModal } from "./OverlayModal";
+import { UploadFilePage } from "./UploadFilePage";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export const ChatInput = () => {
+  const [openUploadFiles, setOpenUploadFiles] = useState(false);
+  const selectedWellId = useSelector(
+    (state: RootState) => state.chat.selectedWellId
+  );
+
   const Textarea = styled(BaseTextareaAutosize)(
     ({ theme }) => `
-    width: 100%;
     font-family: 'IBM Plex Sans', sans-serif;
     font-size: 0.875rem;
     font-weight: 400;
@@ -66,18 +74,40 @@ export const ChatInput = () => {
     <Box
       sx={{
         width: "100%",
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-end",
         padding: "10px 50px",
+        position: "relative",
       }}
     >
       <Textarea
         maxRows={4}
         aria-label="maximum height"
         placeholder={getPlaceholderText()}
+        style={{
+          marginLeft: "auto",
+          marginRight: "auto",
+          minWidth: "60%",
+        }}
       />
+
+      <Tooltip arrow title="Upload new File to Well">
+        <IconButton
+          sx={{
+            position: "absolute",
+            bottom: "17px",
+            left: "0",
+          }}
+          onClick={() => setOpenUploadFiles(true)}
+          disabled={!selectedWellId}
+        >
+          <AttachFileRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
+        </IconButton>
+      </Tooltip>
+      <OverlayModal open={openUploadFiles} setOpen={setOpenUploadFiles}>
+        <UploadFilePage setOpen={setOpenUploadFiles} />
+      </OverlayModal>
     </Box>
   );
 };
