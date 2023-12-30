@@ -76,6 +76,8 @@ function Chat() {
                               "There was an error fetching your files, please try again later."
                             );
                           });
+                      } else {
+                        setWellsLoading(false);
                       }
                     })
                     .catch((err: any) => {
