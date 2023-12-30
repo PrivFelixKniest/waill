@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Dispatch, SetStateAction, useState } from "react";
 import { postWell } from "../api/wells";
 import { AxiosError } from "axios";
+import { wellRepsonseType, wellType } from "../types/chat";
 
 interface CreateWellPageProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -55,12 +56,15 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
             model,
             authToken
           )
-            .then((resp: any) => {
+            .then((resp: wellRepsonseType) => {
               setSaveLoading(false);
               // sus deep copy
               const newWells = JSON.parse(JSON.stringify(wells));
-
-              newWells.push(resp);
+              const newWell: wellType = {
+                ...resp,
+                files: [],
+              };
+              newWells.push(newWell);
               dispatch(setWells(newWells));
               toast.success("Successfully saved");
               setOpen(false);

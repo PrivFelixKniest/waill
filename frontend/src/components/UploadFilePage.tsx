@@ -112,6 +112,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
               const createdDate = new Date(file.created_at);
               return (
                 <Box
+                  key={file.id}
                   sx={{
                     padding: "5px 10px",
                     border: "2px solid " + DARKTEAL,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Box, IconButton, Tooltip } from "@mui/material";
-import { DARKTEAL, SAND } from "../colors";
+import { DARKTEAL, LIGHTTEAL, SAND } from "../colors";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,9 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
   const { getAccessTokenSilently } = useAuth0();
 
   const wells = useSelector((state: RootState) => state.chat.wells);
+  const selectedWellId = useSelector(
+    (state: RootState) => state.chat.selectedWellId
+  );
 
   const handleDeleteWell = (id: number) => {
     setDeleteWellLoading(true);
@@ -34,7 +37,13 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
           .then((resp: any) => {
             const newWells = wells.filter((well) => well.id !== id);
             dispatch(setWells(newWells));
-            dispatch(setSelectedWellId(null));
+            if (selectedWellId === id) {
+              if (newWells.length > 0) {
+                dispatch(setSelectedWellId(newWells[0].id));
+              } else {
+                dispatch(setSelectedWellId(null));
+              }
+            }
             toast.success("Successfully deleted");
             setDeleteWellLoading(false);
           })
@@ -91,6 +100,8 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
                         marginBottom: "10px",
                         width: "100%",
                         whiteSpace: "nowrap",
+                        backgroundColor:
+                          well.id === selectedWellId ? LIGHTTEAL : "",
                       }}
                       onClick={() => dispatch(setSelectedWellId(well.id))}
                     >

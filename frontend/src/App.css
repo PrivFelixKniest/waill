@@ -111,7 +111,8 @@
   border: 2px solid #eafff3;
 }
 .secondary-button-small:disabled {
-  background-color: #a2aca6;
+  background-color: #d6fff5;
+  border: 2px solid #d6fff5;
   cursor: unset;
 }
 
