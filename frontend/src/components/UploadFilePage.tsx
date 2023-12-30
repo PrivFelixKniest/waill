@@ -1,23 +1,30 @@
 import { Box } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
-import { DARKTEAL } from "../colors";
+import { DARKTEAL, HIGHLIGHTTEAL, LIGHTTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 import { postUploadFile } from "../api/files";
 import { RootState } from "../redux/store";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AxiosError } from "axios";
+import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import { fileType, wellType } from "../types/chat";
+import { setWells } from "../redux/slices/chatSlice";
 
 interface UploadFilePageProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
+  const dispatch = useDispatch();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const selectedWellId = useSelector(
     (state: RootState) => state.chat.selectedWellId
   );
+
+  const wells = useSelector((state: RootState) => state.chat.wells);
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -33,15 +40,30 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
       .then((authToken: string) => {
         if (file && selectedWellId) {
           postUploadFile(file, selectedWellId, authToken)
-            .then((resp: any) => {
+            .then((resp: fileType) => {
+              let newWells: wellType[] = JSON.parse(JSON.stringify(wells));
+
+              newWells = newWells.map((well) => {
+                if (well.id === selectedWellId) {
+                  well.files.push(resp);
+                }
+                return well;
+              });
+
+              console.log(newWells);
+              dispatch(setWells(newWells));
               setUploading(false);
-              console.log(resp);
               setOpen(false);
               toast.success("Successfully uploaded");
             })
             .catch((err: AxiosError) => {
-              console.log(err);
-              toast.error("Something went wrong trying to upload your file");
+              if (err.response?.status === 412) {
+                toast.warning(
+                  "Your Well is full! Please remove files before adding new ones."
+                );
+              } else {
+                toast.error("Something went wrong trying to upload your file");
+              }
               setUploading(false);
             });
         } else {
@@ -60,6 +82,63 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
   return (
     <Box sx={{ maxWidth: "900px", color: DARKTEAL }}>
       <Box sx={{ fontSize: "20px", marginBottom: "20px" }}>Upload File</Box>
+      <Box
+        sx={{
+          marginBottom: "18px",
+          paddingBottom: "5px",
+          borderBottom: "2px dashed " + DARKTEAL,
+        }}
+      >
+        <Box sx={{ fontSize: "16px", marginBottom: "5px" }}>
+          Files in Well:{" "}
+          <span style={{ opacity: "0.7" }}>
+            {
+              wells?.filter((well) => well.id === selectedWellId)?.[0]?.files
+                .length
+            }
+            /20
+          </span>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "5px",
+            overflowX: "scroll",
+          }}
+        >
+          {wells
+            ?.filter((well) => well.id === selectedWellId)?.[0]
+            ?.files.map((file) => {
+              const createdDate = new Date(file.created_at);
+              return (
+                <Box
+                  sx={{
+                    padding: "5px 10px",
+                    border: "2px solid " + DARKTEAL,
+                    borderRadius: "10px",
+                    width: "fit-content",
+                    backgroundColor: LIGHTTEAL,
+                    whiteSpace: "nowrap",
+                    marginBottom: "5px",
+                  }}
+                >
+                  <Box sx={{ width: "100%", textAlign: "center" }}>
+                    {file.file_name}
+                  </Box>
+                  <Box
+                    sx={{ width: "100%", textAlign: "center", opacity: "0.7" }}
+                  >
+                    {createdDate.toLocaleDateString("en-US", {
+                      year: "2-digit",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </Box>
+                </Box>
+              );
+            })}
+        </Box>
+      </Box>
       <Box sx={{ display: "flex" }}>
         <label
           htmlFor="file"
@@ -75,8 +154,12 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
               marginBottom: "20px",
               boxSizing: "border-box",
               width: "fit-content",
+
+              display: "flex",
+              gap: "4px",
             }}
           >
+            <SearchRoundedIcon sx={{ height: "20px", width: "20px" }} />
             Choose a file
             <input
               id="file"
@@ -134,7 +217,12 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
         type="button"
         onClick={handleUpload}
         disabled={uploading}
+        style={{
+          display: "flex",
+          gap: "4px",
+        }}
       >
+        <FileUploadRoundedIcon sx={{ height: "20px", width: "20px" }} />
         {uploading ? "Uploading ..." : "Upload File"}
       </button>
     </Box>

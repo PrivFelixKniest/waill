@@ -16,3 +16,12 @@ export const postUploadFile = async (
   });
   return await response?.data;
 };
+
+export const getFiles = async (wellId: number, authToken: string) => {
+  const response = await axios({
+    method: "get",
+    url: `${process.env.REACT_APP_SERVER_URL}/well/${wellId}/files`,
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+  return await { data: response?.data, wellId: wellId };
+};

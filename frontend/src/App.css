@@ -44,6 +44,10 @@
 .primary-button:hover {
   background-color: #48b2cf;
 }
+.primary-button:disabled {
+  background-color: #6ba4b4;
+  cursor: unset;
+}
 
 .primary-button-small {
   border: none;
@@ -59,6 +63,10 @@
 }
 .primary-button-small:hover {
   background-color: #48b2cf;
+}
+.primary-button-small:disabled {
+  background-color: #6ba4b4;
+  cursor: unset;
 }
 
 .secondary-button {
@@ -79,6 +87,10 @@
   background-color: #eafff3;
   border: 2px solid #eafff3;
 }
+.secondary-button:disabled {
+  background-color: #a2aca6;
+  cursor: unset;
+}
 
 .secondary-button-small {
   border: none;
@@ -97,6 +109,10 @@
 .secondary-button-small:hover {
   background-color: #eafff3;
   border: 2px solid #eafff3;
+}
+.secondary-button-small:disabled {
+  background-color: #a2aca6;
+  cursor: unset;
 }
 
 .highlighted-text {
