@@ -66,6 +66,9 @@ def post_upload_file(well_id: int, upload_file: UploadFile, _auth_result: Verify
             raise HTTPException(status_code=403, detail="Your Access Token does not allow access to this Well.")
         if "Assistant support at most 20 files, remove some files before adding new ones." in str(e):
             raise HTTPException(status_code=412, detail="The Well is already full, please remove files before adding new ones.")
+        if "Failed to index file: Unsupported file" in str(e):
+            raise HTTPException(status_code=400, detail="The provided file has an unsupported filetype.")
+
 
         raise HTTPException(status_code=500, detail="Internal Server Error")
 

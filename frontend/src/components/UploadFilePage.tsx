@@ -1,14 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Dispatch, SetStateAction, useState } from "react";
 import { DARKTEAL, HIGHLIGHTTEAL, LIGHTTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
-import { postUploadFile } from "../api/files";
+import { deleteFile, postUploadFile } from "../api/files";
 import { RootState } from "../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { AxiosError } from "axios";
 import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 import { fileType, wellType } from "../types/chat";
 import { setWells } from "../redux/slices/chatSlice";
 
@@ -20,6 +22,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
   const dispatch = useDispatch();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [deleteFileLoading, setDeleteFileLoading] = useState(false);
   const selectedWellId = useSelector(
     (state: RootState) => state.chat.selectedWellId
   );
@@ -52,8 +55,9 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
 
               console.log(newWells);
               dispatch(setWells(newWells));
+              setFile(null);
               setUploading(false);
-              setOpen(false);
+              // setOpen(false); // user experience?
               toast.success("Successfully uploaded");
             })
             .catch((err: AxiosError) => {
@@ -61,8 +65,12 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
                 toast.warning(
                   "Your Well is full! Please remove files before adding new ones."
                 );
+              } else if (err.response?.status === 400) {
+                toast.warning(
+                  "The provided file has an unsupported file type. (Please note that the file type and file ending eg. '.pdf' can differ)."
+                );
               } else {
-                toast.error("Something went wrong trying to upload your file");
+                toast.error("Something went wrong trying to upload your file.");
               }
               setUploading(false);
             });
@@ -76,6 +84,46 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
           "There was an error getting your authorization token, please try again later."
         );
         setUploading(false);
+      });
+  };
+
+  const handleDelete = (fileId: number) => {
+    setDeleteFileLoading(true);
+    getAccessTokenSilently()
+      .then((authToken: string) => {
+        if (selectedWellId) {
+          deleteFile(selectedWellId, fileId, authToken)
+            .then((fileResp: fileType) => {
+              setDeleteFileLoading(false);
+              const wellsCopy: wellType[] = JSON.parse(JSON.stringify(wells));
+              const newWells = wellsCopy.map((well) => {
+                if (well.id === selectedWellId) {
+                  return {
+                    ...well,
+                    files: well.files.filter((file) => file.id !== fileResp.id),
+                  };
+                }
+                return well;
+              });
+              dispatch(setWells(newWells));
+              toast.success("Successfully deleted a file");
+            })
+            .catch((err: AxiosError) => {
+              setDeleteFileLoading(false);
+              toast.error(
+                "Something went wrong trying to delete a file, please try again later."
+              );
+            });
+        } else {
+          setDeleteFileLoading(false);
+          toast.warning("No Well is selected while trying to delete a file.");
+        }
+      })
+      .catch((err: any) => {
+        setDeleteFileLoading(false);
+        toast.error(
+          "There was an error getting your authorization token, please try again later."
+        );
       });
   };
 
@@ -121,20 +169,72 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
                     backgroundColor: LIGHTTEAL,
                     whiteSpace: "nowrap",
                     marginBottom: "5px",
+                    display: "flex",
+                    gap: "5px",
                   }}
                 >
-                  <Box sx={{ width: "100%", textAlign: "center" }}>
-                    {file.file_name}
+                  <Box>
+                    <Box sx={{ width: "100%", textAlign: "center" }}>
+                      {file.file_name}
+                    </Box>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        textAlign: "center",
+                        opacity: "0.7",
+                      }}
+                    >
+                      {createdDate.toLocaleDateString("en-US", {
+                        year: "2-digit",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </Box>
                   </Box>
-                  <Box
-                    sx={{ width: "100%", textAlign: "center", opacity: "0.7" }}
-                  >
-                    {createdDate.toLocaleDateString("en-US", {
-                      year: "2-digit",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </Box>
+                  <Tooltip arrow title="Delete File from Well">
+                    <Box>
+                      <IconButton
+                        sx={{
+                          height: "100%",
+                          marginTop: "auto",
+                          marginBottom: "auto",
+                        }}
+                        onClick={() => handleDelete(file.id)}
+                        disabled={deleteFileLoading}
+                      >
+                        {deleteFileLoading ? (
+                          <Box
+                            sx={{
+                              width: "24px",
+                              height: "24px",
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                transform: "scale(0.5)",
+                                position: "absolute",
+                                top: "-9px",
+                                left: "-8px",
+                              }}
+                            >
+                              <CircularProgress
+                                color="inherit"
+                                sx={{
+                                  color: DARKTEAL,
+                                }}
+                              />
+                            </Box>
+                          </Box>
+                        ) : (
+                          <CloseRoundedIcon
+                            color="inherit"
+                            sx={{ color: DARKTEAL }}
+                          />
+                        )}
+                      </IconButton>
+                    </Box>
+                  </Tooltip>
                 </Box>
               );
             })}
@@ -208,7 +308,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
             <li>Name: {file.name}</li>
             <li>Type: {file.type}</li>
             <li style={{ color: file.size > 536870912 ? "red" : "green" }}>
-              Size: {(file.size / 1048576).toFixed(3)} MB (limit is 512)
+              Size: {(file.size / 1048576).toFixed(3)} MB (limit is 512 MB)
             </li>
           </ul>
         </section>

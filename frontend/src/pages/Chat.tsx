@@ -153,7 +153,9 @@ function Chat() {
     <Box
       sx={{
         width: "100vw",
+        maxWidth: "100vw",
         height: "100vh",
+        maxHeight: "100vh",
         position: "relative",
         display: "flex",
         flexDirection: "column",

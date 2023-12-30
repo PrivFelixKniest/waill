@@ -25,3 +25,16 @@ export const getFiles = async (wellId: number, authToken: string) => {
   });
   return await { data: response?.data, wellId: wellId };
 };
+
+export const deleteFile = async (
+  wellId: number,
+  fileId: number,
+  authToken: string
+) => {
+  const response = await axios({
+    method: "delete",
+    url: `${process.env.REACT_APP_SERVER_URL}/well/${wellId}/file/${fileId}`,
+    headers: { Authorization: `Bearer ${authToken}` },
+  });
+  return await response?.data;
+};

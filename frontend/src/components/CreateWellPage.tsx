@@ -231,7 +231,7 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
         type="button"
         disabled={saveLoading}
       >
-        {saveLoading ? "Loading" : "Save"}
+        {saveLoading ? "Loading ..." : "Save"}
       </button>
     </Box>
   );

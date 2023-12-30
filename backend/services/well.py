@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from db.database import DB_Session
 from routers.auth_schema import VerifySchema
 from routers.well_schemas import PostWellSchema
-from db.database_schemas import User, Well
+from db.database_schemas import User, Well, File
 
 from openai import OpenAI
 
@@ -82,6 +82,26 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
 
             # Create client
             client = OpenAI(api_key=decrypt(well.openai_api_key))
+
+            # Delete Files
+            files = db.query(File).where(File.well_id == well_id).all()
+            for file in files:
+                try:
+                    client.files.delete(file_id=file.file_id)
+                except Exception as e:
+                    if "No such File object" in str(e):
+                        pass
+                    else:
+                        raise e
+                try:
+                    client.beta.assistants.files.delete(assistant_id=well.assistant_id, file_id=file.file_id)
+                except Exception as e:
+                    if "No such File object" in str(e) or "No assistant found with id" in str(e):
+                        pass
+                    else:
+                        raise e
+
+                db.delete(file)
 
             try:
                 client.beta.assistants.delete(assistant_id=well.assistant_id)
