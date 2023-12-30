@@ -6,11 +6,17 @@ import { ChatInput } from "../components/ChatInput";
 import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
 import { Sidebar } from "../components/Sidebar";
 import { getUser } from "../api/userInformation";
-import { setOpenaiKey, setWells } from "../redux/slices/chatSlice";
+import {
+  setOpenaiKey,
+  setSelectedWellId,
+  setWells,
+} from "../redux/slices/chatSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 import { WellsBar } from "../components/WellsBar";
 import { getWells } from "../api/wells";
+import { fileType, wellRepsonseType, wellType } from "../types/chat";
+import { getFiles } from "../api/files";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -24,19 +30,53 @@ function Chat() {
         window.location.href = "/";
       } else if (isAuthenticated) {
         setUserLoading(true);
-        // token is not yet valid error (iat)
-        setTimeout(() => {
-          getAccessTokenSilently()
-            .then((authToken: string) => {
+        getAccessTokenSilently()
+          .then((authToken: string) => {
+            // token is not yet valid error (iat)
+            setTimeout(() => {
               getUser(authToken)
-                .then((resp: any) => {
-                  dispatch(setOpenaiKey(resp.openai_api_key));
+                .then((uaserResp: any) => {
+                  dispatch(setOpenaiKey(uaserResp.openai_api_key));
                   setUserLoading(false);
                   setWellsLoading(true);
                   getWells(authToken)
-                    .then((resp) => {
-                      setWellsLoading(false);
-                      dispatch(setWells(resp));
+                    .then((wellsResp: wellRepsonseType[]) => {
+                      if (wellsResp.length !== 0) {
+                        dispatch(setSelectedWellId(wellsResp[0].id));
+                        Promise.all(
+                          wellsResp.map((well) => {
+                            return getFiles(well.id, authToken);
+                          })
+                        )
+                          .then(
+                            (
+                              allFilesResponse: {
+                                wellId: number;
+                                data: fileType[];
+                              }[]
+                            ) => {
+                              const storeWells: wellType[] = wellsResp.map(
+                                (well) => {
+                                  return {
+                                    ...well,
+                                    files: allFilesResponse.filter(
+                                      (filesResponse) =>
+                                        filesResponse.wellId === well.id
+                                    )?.[0].data,
+                                  };
+                                }
+                              );
+                              setWellsLoading(false);
+                              dispatch(setWells(storeWells));
+                            }
+                          )
+                          .catch((err: any) => {
+                            setWellsLoading(false);
+                            toast.error(
+                              "There was an error fetching your files, please try again later."
+                            );
+                          });
+                      }
                     })
                     .catch((err: any) => {
                       setWellsLoading(false);
@@ -50,13 +90,13 @@ function Chat() {
                     "There was an error fetching your user data, please try again."
                   );
                 });
-            })
-            .catch((err: any) => {
-              toast.error(
-                "There was an error getting your authorization token, please try again later."
-              );
-            });
-        }, 750);
+            }, 2000);
+          })
+          .catch((err: any) => {
+            toast.error(
+              "There was an error getting your authorization token, please try again later."
+            );
+          });
       }
     }
   }, [isAuthenticated, isLoading]);
@@ -113,7 +153,9 @@ function Chat() {
     <Box
       sx={{
         width: "100vw",
+        maxWidth: "100vw",
         height: "100vh",
+        maxHeight: "100vh",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -172,7 +214,7 @@ function Chat() {
               <Box sx={{ flexGrow: "1" }}>
                 <ChatMessages />
               </Box>
-              <Box sx={{ height: "200px" }}>
+              <Box>
                 <ChatInput />
               </Box>
             </Box>

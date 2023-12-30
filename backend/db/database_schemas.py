@@ -47,3 +47,12 @@ class Message(Base, BaseModel):
     well_id: Mapped[int]
     creator: Mapped[Creator]
     content: Mapped[str]
+
+
+class File(Base, BaseModel):
+    __tablename__ = "file"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    well_id: Mapped[int]
+    file_id: Mapped[str]
+    file_name: Mapped[str]
+    file_type: Mapped[str]
