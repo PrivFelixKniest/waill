@@ -95,11 +95,9 @@ export const SettingsPage = () => {
             onChange={(e: any) => dispatch(setOpenaiKey(e.target.value))}
           />
           <Tooltip arrow title="Save">
-            <span>
-              <IconButton onClick={handleKeySave}>
-                <CheckRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
-              </IconButton>
-            </span>
+            <IconButton onClick={handleKeySave}>
+              <CheckRoundedIcon color="inherit" sx={{ color: DARKTEAL }} />
+            </IconButton>
           </Tooltip>
         </Box>
       </Box>

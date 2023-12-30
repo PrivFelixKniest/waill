@@ -44,30 +44,6 @@
 .primary-button:hover {
   background-color: #48b2cf;
 }
-.primary-button:disabled {
-  background-color: #6ba4b4;
-  cursor: unset;
-}
-
-.primary-button-small {
-  border: none;
-  padding: 7px 17px 7px 17px;
-  background-color: #277888;
-  border-radius: 10px;
-  color: #eafff3;
-  transition: background-color 0.05s linear;
-  cursor: pointer;
-  font-family: "DMSans";
-  text-decoration: none;
-  font-size: 15px;
-}
-.primary-button-small:hover {
-  background-color: #48b2cf;
-}
-.primary-button-small:disabled {
-  background-color: #6ba4b4;
-  cursor: unset;
-}
 
 .secondary-button {
   border: none;
@@ -87,10 +63,6 @@
   background-color: #eafff3;
   border: 2px solid #eafff3;
 }
-.secondary-button:disabled {
-  background-color: #a2aca6;
-  cursor: unset;
-}
 
 .secondary-button-small {
   border: none;
@@ -109,11 +81,6 @@
 .secondary-button-small:hover {
   background-color: #eafff3;
   border: 2px solid #eafff3;
-}
-.secondary-button-small:disabled {
-  background-color: #d6fff5;
-  border: 2px solid #d6fff5;
-  cursor: unset;
 }
 
 .highlighted-text {
