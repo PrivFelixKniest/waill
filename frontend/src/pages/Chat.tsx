@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ChatMessages } from "../components/ChatMessages";
-import { ChatInput } from "../components/ChatInput";
+import { ChatMessages } from "../components/chat/ChatMessages";
+import { ChatInput } from "../components/chat/ChatInput";
 import { DARKTEAL, LIGHTSAND, LIGHTTEAL, SAND } from "../colors";
 import { Sidebar } from "../components/Sidebar";
 import { getUser } from "../api/userInformation";
@@ -23,6 +23,9 @@ function Chat() {
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [userLoading, setUserLoading] = useState(true);
   const [wellsLoading, setWellsLoading] = useState(true);
+
+  const topbarHeight = "50px";
+  const chatInputHeight = "80px";
 
   useEffect(() => {
     if (!isLoading) {
@@ -168,7 +171,7 @@ function Chat() {
         <>
           <Box
             sx={{
-              height: "50px",
+              height: topbarHeight,
               backgroundColor: LIGHTTEAL,
               padding: "5px 15px",
               display: "flex",
@@ -202,21 +205,35 @@ function Chat() {
             </Box>
           </Box>
           <Box
-            sx={{ flexGrow: "1", backgroundColor: LIGHTSAND, display: "flex" }}
+            sx={{
+              height: `calc(100% - ${topbarHeight})`,
+              backgroundColor: LIGHTSAND,
+              display: "flex",
+            }}
           >
             <Sidebar />
             <Box
               sx={{
-                flexGrow: "1",
                 padding: "20px",
+                paddingTop: "0px",
                 display: "flex",
+                width: "calc(100% - 500px)",
                 flexDirection: "column",
+                justifyContent: "flex-end",
+                maxHeight: "100%",
               }}
             >
-              <Box sx={{ flexGrow: "1" }}>
+              <Box sx={{ height: `calc(100% - ${chatInputHeight})` }}>
                 <ChatMessages />
               </Box>
-              <Box>
+              <Box
+                sx={{
+                  height: chatInputHeight,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <ChatInput />
               </Box>
             </Box>

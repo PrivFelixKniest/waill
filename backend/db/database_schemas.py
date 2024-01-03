@@ -45,6 +45,8 @@ class Message(Base, BaseModel):
     __tablename__ = "message"
     id: Mapped[int] = mapped_column(primary_key=True)
     well_id: Mapped[int]
+    message_id: Mapped[str]
+    message_index: Mapped[int]
     creator: Mapped[Creator]
     content: Mapped[str]
 

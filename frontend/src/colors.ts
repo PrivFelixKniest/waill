@@ -6,3 +6,5 @@ export const LIGHTHIGHLIGHTTEAL = "#97d3df";
 export const HIGHLIGHTTEAL = "#94eafc";
 export const DARKHIGHLIGHTTEAL = "#56dffa";
 export const GRAYTEAL = "#9dc4cc";
+export const CHATBUBBLE1 = "#c4f5ff";
+export const CHATBUBBLE2 = "#e6fcf3";

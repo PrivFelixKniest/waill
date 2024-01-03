@@ -12,7 +12,11 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 import { fileType, wellType } from "../types/chat";
-import { setWells } from "../redux/slices/chatSlice";
+import {
+  addFileToWell,
+  removeFileFromWell,
+  setWells,
+} from "../redux/slices/chatSlice";
 
 interface UploadFilePageProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -44,20 +48,9 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
         if (file && selectedWellId) {
           postUploadFile(file, selectedWellId, authToken)
             .then((resp: fileType) => {
-              let newWells: wellType[] = JSON.parse(JSON.stringify(wells));
-
-              newWells = newWells.map((well) => {
-                if (well.id === selectedWellId) {
-                  well.files.push(resp);
-                }
-                return well;
-              });
-
-              console.log(newWells);
-              dispatch(setWells(newWells));
+              dispatch(addFileToWell({ wellId: selectedWellId, file: resp }));
               setFile(null);
               setUploading(false);
-              // setOpen(false); // user experience?
               toast.success("Successfully uploaded");
             })
             .catch((err: AxiosError) => {
@@ -94,18 +87,10 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
         if (selectedWellId) {
           deleteFile(selectedWellId, fileId, authToken)
             .then((fileResp: fileType) => {
+              dispatch(
+                removeFileFromWell({ wellId: selectedWellId, file: fileResp })
+              );
               setDeleteFileLoading(false);
-              const wellsCopy: wellType[] = JSON.parse(JSON.stringify(wells));
-              const newWells = wellsCopy.map((well) => {
-                if (well.id === selectedWellId) {
-                  return {
-                    ...well,
-                    files: well.files.filter((file) => file.id !== fileResp.id),
-                  };
-                }
-                return well;
-              });
-              dispatch(setWells(newWells));
               toast.success("Successfully deleted a file");
             })
             .catch((err: AxiosError) => {

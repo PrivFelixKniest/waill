@@ -70,7 +70,6 @@
 }
 
 .secondary-button {
-  border: none;
   padding: 8px 18px 8px 18px;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 10px;
@@ -93,7 +92,6 @@
 }
 
 .secondary-button-small {
-  border: none;
   padding: 5px 15px 5px 15px;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 10px;
@@ -113,6 +111,28 @@
 .secondary-button-small:disabled {
   background-color: #d6fff5;
   border: 2px solid #d6fff5;
+  cursor: unset;
+}
+
+.submit-button {
+  padding: 8px 18px 8px 18px;
+  background-color: #eafff3;
+  border-radius: 10px;
+  color: #277888;
+  transition: background-color 0.05s linear;
+  transition: border 0.05s linear;
+  cursor: pointer;
+  border: 2px solid #97d3df;
+  font-family: "DMSans";
+  text-decoration: none;
+  font-size: 18px;
+}
+.submit-button:hover {
+  background-color: #eafff3;
+  border: 2px solid #eafff3;
+}
+.submit-button:disabled {
+  background-color: #e2f7ef;
   cursor: unset;
 }
 
@@ -231,6 +251,24 @@
 .well-button:hover {
   background-color: #eafff3;
   border: 2px dashed #eafff3;
+}
+
+@keyframes message-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.message-animation {
+  animation: 0.45s message-appear;
 }
 
 @media only screen and (max-width: 899px) {

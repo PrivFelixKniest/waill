@@ -2,12 +2,11 @@ from fastapi import HTTPException, UploadFile
 
 from db.database import DB_Session
 from routers.auth_schema import VerifySchema
-from routers.well_schemas import PostWellSchema
 from db.database_schemas import User, Well, File
 
 from openai import OpenAI
 
-from services.encryption import encrypt, decrypt
+from services.encryption import decrypt
 
 
 def post_upload_file(well_id: int, upload_file: UploadFile, _auth_result: VerifySchema):
@@ -50,7 +49,6 @@ def post_upload_file(well_id: int, upload_file: UploadFile, _auth_result: Verify
                     "updated_at": new_file.updated_at
                 }
     except Exception as e:
-        print(e)
         if "Connection error." in str(e) or "Incorrect API key provided" in str(e):
             raise HTTPException(status_code=422, detail="Creating an OpenAI client was unsuccessful, most likely due to an incorrect key")
         if "User is None Error" in str(e):
@@ -68,7 +66,6 @@ def post_upload_file(well_id: int, upload_file: UploadFile, _auth_result: Verify
             raise HTTPException(status_code=412, detail="The Well is already full, please remove files before adding new ones.")
         if "Failed to index file: Unsupported file" in str(e):
             raise HTTPException(status_code=400, detail="The provided file has an unsupported filetype.")
-
 
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
@@ -160,7 +157,7 @@ def delete_file(well_id: int, file_id: int, _auth_result: VerifySchema):
             try:
                 client.beta.assistants.files.delete(assistant_id=well.assistant_id, file_id=file.file_id)
             except Exception as e:
-                if "No such File object" in str(e):
+                if "No file found with id" in str(e):
                     pass
                 else:
                     raise e
@@ -176,7 +173,6 @@ def delete_file(well_id: int, file_id: int, _auth_result: VerifySchema):
                     "updated_at": file.updated_at
                 }
     except Exception as e:
-        print(e)
         if "Connection error." in str(e) or "Incorrect API key provided" in str(e):
             raise HTTPException(status_code=422, detail="Creating an OpenAI client was unsuccessful, most likely due to an incorrect key")
         if "User is None Error" in str(e):

@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from db.database import DB_Session
 from routers.auth_schema import VerifySchema
 from routers.well_schemas import PostWellSchema
-from db.database_schemas import User, Well, File
+from db.database_schemas import User, Well, File, Message
 
 from openai import OpenAI
 
@@ -42,6 +42,7 @@ def post_well(well: PostWellSchema, _auth_result: VerifySchema):
                 "model": new_well.model,
                 "instructions": new_well.instructions,
                 "user_id": new_well.user_id,
+                "messages": [],
                 "created_at": new_well.created_at,
                 "updated_at": new_well.updated_at
             }
@@ -119,14 +120,27 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
                 else:
                     raise e
 
+            # get Messages for well
+            messages = db.query(Message).where(Message.well_id == well.id).all()
+            messages_output = []
+            for message in messages:
+                messages_output.append({
+                    "id": message.id,
+                    "content": message.content,
+                    "message_index": message.message_index,
+                    "created_at": message.created_at,
+                    "creator": message.creator
+                })
+                db.delete(message)
+
             db.delete(well)
-            db.flush()
             return {
                 "id": well.id,
                 "name": well.name,
                 "model": well.model,
                 "instructions": well.instructions,
                 "user_id": well.user_id,
+                "messages": reversed(messages_output),
                 "created_at": well.created_at,
                 "updated_at": well.updated_at
             }
@@ -161,21 +175,34 @@ def get_well(_auth_result: VerifySchema):
             if user is None:
                 raise Exception("User is None Error")
 
-
+            # get Wells
             wells = db.query(Well).where(Well.user_id == user.id).all()
 
             wells_output = []
 
             for well in wells:
+                # get Messages for well
+                messages = db.query(Message).where(Message.well_id == well.id).all()
+                messages_output = []
+                for message in messages:
+                    messages_output.append({
+                        "id": message.id,
+                        "content": message.content,
+                        "message_index": message.message_index,
+                        "created_at": message.created_at,
+                        "creator": message.creator
+                    })
+
                 wells_output.append({
-                "id": well.id,
-                "name": well.name,
-                "model": well.model,
-                "instructions": well.instructions,
-                "user_id": well.user_id,
-                "created_at": well.created_at,
-                "updated_at": well.updated_at
-            })
+                    "id": well.id,
+                    "name": well.name,
+                    "model": well.model,
+                    "instructions": well.instructions,
+                    "user_id": well.user_id,
+                    "messages": reversed(messages_output),
+                    "created_at": well.created_at,
+                    "updated_at": well.updated_at
+                })
 
             return wells_output
     except Exception as e:

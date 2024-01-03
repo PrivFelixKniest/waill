@@ -1,7 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter, Security, UploadFile
-import os
 
 from routers.auth_schema import VerifySchema
 from routers.files_schemas import PostFileResponse

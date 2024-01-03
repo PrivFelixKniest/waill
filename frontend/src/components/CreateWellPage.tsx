@@ -3,7 +3,11 @@ import { DARKHIGHLIGHTTEAL, DARKTEAL, HIGHLIGHTTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
-import { setWells } from "../redux/slices/chatSlice";
+import {
+  addWell,
+  setSelectedWellId,
+  setWells,
+} from "../redux/slices/chatSlice";
 import { toast } from "sonner";
 import { Dispatch, SetStateAction, useState } from "react";
 import { postWell } from "../api/wells";
@@ -59,18 +63,16 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
             .then((resp: wellRepsonseType) => {
               setSaveLoading(false);
               // sus deep copy
-              const newWells = JSON.parse(JSON.stringify(wells));
               const newWell: wellType = {
                 ...resp,
                 files: [],
               };
-              newWells.push(newWell);
-              dispatch(setWells(newWells));
+              dispatch(addWell(newWell));
+              dispatch(setSelectedWellId(resp.id));
               toast.success("Successfully saved");
               setOpen(false);
             })
             .catch((err: AxiosError) => {
-              console.log(err);
               if (err.response?.status === 400) {
                 toast.error(
                   "Your Model selection was denied. This usually occurs when trying to select GPT-4 with an OpenAI key pointing to a free account. Please make sure that you are selecting a model that you have access to."

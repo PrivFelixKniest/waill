@@ -1,6 +1,6 @@
-from fastapi import UploadFile
 from pydantic import BaseModel, Field
 from datetime import datetime
+
 
 class PostFileResponse(BaseModel):
     id: int = Field(..., title="File ID")

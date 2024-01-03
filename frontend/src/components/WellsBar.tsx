@@ -10,7 +10,11 @@ import { OverlayModal } from "./OverlayModal";
 import { CreateWellPage } from "./CreateWellPage";
 import { useAuth0 } from "@auth0/auth0-react";
 import { deleteWell } from "../api/wells";
-import { setSelectedWellId, setWells } from "../redux/slices/chatSlice";
+import {
+  removeWell,
+  setSelectedWellId,
+  setWells,
+} from "../redux/slices/chatSlice";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 
@@ -35,16 +39,26 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
       .then((authToken: string) => {
         deleteWell(id, authToken)
           .then((resp: any) => {
-            const newWells = wells.filter((well) => well.id !== id);
-            dispatch(setWells(newWells));
-            if (selectedWellId === id) {
-              if (newWells.length > 0) {
-                dispatch(setSelectedWellId(newWells[0].id));
-              } else {
-                dispatch(setSelectedWellId(null));
+            const wellToRemove = wells.find((well) => well.id === id);
+            // type check
+            if (wellToRemove) {
+              dispatch(removeWell(wellToRemove));
+              if (selectedWellId === id) {
+                if (
+                  wells.filter((well) => well.id !== selectedWellId).length > 0
+                ) {
+                  dispatch(
+                    setSelectedWellId(
+                      wells.filter((well) => well.id !== selectedWellId)[0].id
+                    )
+                  );
+                } else {
+                  dispatch(setSelectedWellId(null));
+                }
               }
+              toast.success("Successfully deleted");
             }
-            toast.success("Successfully deleted");
+
             setDeleteWellLoading(false);
           })
           .catch((err: AxiosError) => {
