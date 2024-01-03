@@ -271,6 +271,44 @@
   animation: 0.45s message-appear;
 }
 
+.bouncing-dot {
+  background-color: #277888;
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+}
+
+.bouncing-dot.dot-1 {
+  animation: 1s ease dots-bouncing infinite;
+  animation-delay: 0s;
+}
+.bouncing-dot.dot-2 {
+  animation: 1s ease dots-bouncing infinite;
+  animation-delay: 0.1s;
+}
+.bouncing-dot.dot-3 {
+  animation: 1s ease dots-bouncing infinite;
+  animation-delay: 0.2s;
+}
+
+@keyframes dots-bouncing {
+  0% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.4;
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 0.6;
+    transform: translateY(-1px);
+  }
+}
+
 @media only screen and (max-width: 899px) {
   .App-header {
     background-image: url("../public/waill-tall.png");

@@ -18,7 +18,9 @@ def post_message(well_id: int, query: QuerySchema, _auth_result: VerifySchema):
             # Fetch User
             try:
                 user = db.query(User).where(User.auth0_user_id == _auth_result["sub"]).first()
-            except Exception:
+            except Exception as e:
+                print("wierd error")
+                print(e)
                 raise Exception("Init DB Fetch Error")
             if user is None:
                 raise Exception("User is None Error")
@@ -138,6 +140,7 @@ def save_response_to_db(run_id: str, well_id: int, _auth_result: VerifySchema):
                                                                                      well_id=well_id))
 
         db.add(assistant_db_message)
+        db.flush()
 
 
 def get_run_and_response(run_id: str, well_id: int, _auth_result: VerifySchema):

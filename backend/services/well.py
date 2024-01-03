@@ -140,7 +140,7 @@ def delete_well(well_id: int, _auth_result: VerifySchema):
                 "model": well.model,
                 "instructions": well.instructions,
                 "user_id": well.user_id,
-                "messages": reversed(messages_output),
+                "messages": sorted(messages_output, key=lambda x: x["message_index"], reverse=True),
                 "created_at": well.created_at,
                 "updated_at": well.updated_at
             }
@@ -199,7 +199,7 @@ def get_well(_auth_result: VerifySchema):
                     "model": well.model,
                     "instructions": well.instructions,
                     "user_id": well.user_id,
-                    "messages": reversed(messages_output),
+                    "messages": sorted(messages_output, key=lambda x: x["message_index"], reverse=True),
                     "created_at": well.created_at,
                     "updated_at": well.updated_at
                 })

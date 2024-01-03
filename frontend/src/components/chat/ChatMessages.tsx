@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { ChatMessage } from "./ChatMessage";
 import { Creator, messageType } from "../../types/chat";
+import { ChatMessageWriting } from "./ChatMessageWriting";
 
 export const ChatMessages = () => {
-  const { wells, selectedWellId } = useSelector(
+  const { wells, selectedWellId, promptLoadingWellId } = useSelector(
     (state: RootState) => state.chat
   );
 
@@ -40,6 +41,7 @@ export const ChatMessages = () => {
         paddingTop: "0px",
       }}
     >
+      {promptLoadingWellId === selectedWellId && <ChatMessageWriting />}
       {wells
         .filter((well) => well.id === selectedWellId)[0]
         .messages.map((message: messageType) => {
@@ -51,7 +53,7 @@ export const ChatMessages = () => {
           key={"Initial message on the page"}
           message={{
             content:
-              "Hey! Type something below and submit the message in order to get an answere!",
+              "Hey! \n Type something below and submit the message in order to get an answer!",
             creator: Creator.assistant,
             created_at: "",
             message_index: 0,

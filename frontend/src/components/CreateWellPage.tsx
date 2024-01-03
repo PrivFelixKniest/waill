@@ -106,7 +106,7 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
   return (
     <Box sx={{ color: DARKTEAL }}>
       <Box sx={{ fontSize: "20px", marginBottom: "20px" }}>
-        Create a New Well
+        Create a new Well
       </Box>
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>

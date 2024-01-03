@@ -78,11 +78,11 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
                 sx={{
                   marginBottom:
                     message.content.split("\n").length - 1 !== idx
-                      ? "5px"
+                      ? "10px"
                       : "0px",
                 }}
               >
-                {paragraph}
+                {paragraph.replaceAll(String.fromCharCode(92), "")}
               </Box>
             );
           })}

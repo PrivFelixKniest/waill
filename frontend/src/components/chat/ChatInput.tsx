@@ -21,7 +21,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { Creator, runType, wellType } from "../../types/chat";
-import { addMessageToWell, setWells } from "../../redux/slices/chatSlice";
+import {
+  addMessageToWell,
+  setPromptLoadingWellIdWellId,
+  setWells,
+} from "../../redux/slices/chatSlice";
 import { time } from "console";
 
 const Textarea = styled(BaseTextareaAutosize)(
@@ -62,8 +66,7 @@ export const ChatInput = () => {
   const dispatch = useDispatch();
   const [openUploadFiles, setOpenUploadFiles] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [promptLoading, setPromptLoading] = useState(false);
-  const { selectedWellId, wells } = useSelector(
+  const { selectedWellId, wells, promptLoadingWellId } = useSelector(
     (state: RootState) => state.chat
   );
 
@@ -154,14 +157,14 @@ export const ChatInput = () => {
             },
           })
         );
-        setPromptLoading(false);
+        dispatch(setPromptLoadingWellIdWellId(null));
       } else {
         toast.warning(
           `Something went wrong trying to generate your response: ${
             run?.last_error || ""
           }, please try again later.`
         );
-        setPromptLoading(false);
+        dispatch(setPromptLoadingWellIdWellId(null));
       }
     } catch (err) {
       toast.error(
@@ -194,13 +197,13 @@ export const ChatInput = () => {
       setPrompt("");
       getAccessTokenSilently()
         .then((authToken: string) => {
-          setPromptLoading(true);
+          dispatch(setPromptLoadingWellIdWellId(selectedWellId));
           postQuery(prompt, selectedWellId, authToken)
             .then((resp: runType) => {
               startFetchingForAnswer(resp.run_id, selectedWellId, authToken);
             })
             .catch((err: AxiosError) => {
-              setPromptLoading(false);
+              dispatch(setPromptLoadingWellIdWellId(null));
               toast.error(
                 "Something went wrong trying to submit your prompt, please try again later."
               );
@@ -244,6 +247,12 @@ export const ChatInput = () => {
           value={prompt}
           name="Prompt"
           onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSubmitPrompt();
+            }
+          }}
           style={{
             width: "calc(100% - 44px)",
           }}
@@ -258,7 +267,7 @@ export const ChatInput = () => {
           }}
           type="button"
           onClick={handleSubmitPrompt}
-          disabled={promptLoading || selectedWellId === null}
+          disabled={promptLoadingWellId !== null || selectedWellId === null}
         >
           <SendRoundedIcon
             color="inherit"

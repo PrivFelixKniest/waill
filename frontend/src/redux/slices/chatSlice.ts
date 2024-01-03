@@ -17,12 +17,14 @@ export interface ChatState {
   openaiKey: string;
   wells: wellType[];
   selectedWellId: number | null;
+  promptLoadingWellId: number | null;
 }
 
 const initialState: ChatState = {
   openaiKey: "",
   wells: [],
   selectedWellId: null,
+  promptLoadingWellId: null,
 };
 
 export const chatSlice = createSlice({
@@ -79,6 +81,12 @@ export const chatSlice = createSlice({
         return well;
       });
     },
+    setPromptLoadingWellIdWellId: (
+      state,
+      action: PayloadAction<number | null>
+    ) => {
+      state.promptLoadingWellId = action.payload;
+    },
   },
 });
 
@@ -92,6 +100,7 @@ export const {
   removeWell,
   addFileToWell,
   removeFileFromWell,
+  setPromptLoadingWellIdWellId,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
