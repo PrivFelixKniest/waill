@@ -250,7 +250,13 @@ export const ChatInput = () => {
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
-              handleSubmitPrompt();
+              if (promptLoadingWellId === null) {
+                handleSubmitPrompt();
+              } else {
+                toast.warning(
+                  "Another message is being processed right now. Please wait until it finishes!"
+                );
+              }
             }
           }}
           style={{
