@@ -10,21 +10,25 @@ from services.encryption import encrypt, decrypt
 def get_user(_auth_result: VerifySchema):
     try:
         with DB_Session.begin() as db:
+            print("Start Fetch")
             # Fetch User
             try:
                 user = db.query(User).where(User.auth0_user_id == _auth_result["sub"]).first()
             except Exception:
                 raise Exception("Init DB Fetch Error")
 
+            print("Check User")
             if user is None:
+                print("Create User")
                 new_user = User(auth0_user_id=_auth_result["sub"], openai_api_key=encrypt(""))
                 db.add(new_user)
                 db.flush()
                 # updating user from db
                 user = db.query(User).where(User.auth0_user_id == _auth_result["sub"]).first()
+            print("Return User")
             return {"id": user.id, "auth0_user_id": user.auth0_user_id, "openai_api_key": decrypt(user.openai_api_key), "created_at": user.created_at, "updated_at": user.updated_at}
     except Exception as e:
-        print(e)
+        print("Error:" + str(e))
         if "Init DB Fetch Error" in str(e):
             raise HTTPException(status_code=424,
                                 detail="The initial database fetch for the user information failed, failed dependency.")
