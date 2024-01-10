@@ -26,6 +26,9 @@ def get_user(_auth_result: VerifySchema):
                 # updating user from db
                 user = db.query(User).where(User.auth0_user_id == _auth_result["sub"]).first()
             print("Return User")
+            print("userid" + user.id)
+            print("auth0 user" + user.auth0_user_id)
+            print("openai key" + decrypt(user.openai_api_key))
             return {"id": user.id, "auth0_user_id": user.auth0_user_id, "openai_api_key": decrypt(user.openai_api_key), "created_at": user.created_at, "updated_at": user.updated_at}
     except Exception as e:
         print("Error:" + str(e))
