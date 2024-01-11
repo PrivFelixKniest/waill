@@ -111,7 +111,13 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>Name</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
+          <Box
+            sx={{
+              opacity: ".7",
+              fontSize: { xs: "13px", md: "14px" },
+              maxWidth: "800px",
+            }}
+          >
             A recognisable name for your well
           </Box>
         </Box>
@@ -128,7 +134,13 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>Instructions</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
+          <Box
+            sx={{
+              opacity: ".7",
+              fontSize: { xs: "13px", md: "14px" },
+              maxWidth: "800px",
+            }}
+          >
             How should the AI behave? How should it address you? How should it
             talk?
           </Box>
@@ -146,7 +158,13 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>OpenAI API Key</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
+          <Box
+            sx={{
+              opacity: ".7",
+              fontSize: { xs: "13px", md: "14px" },
+              maxWidth: "800px",
+            }}
+          >
             This is set to the default value you defined in your account
             settings. If you want to deviate from your default for this Well you
             can edit the key here.
@@ -165,13 +183,32 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>Model</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
+          <Box
+            sx={{
+              opacity: ".7",
+              fontSize: { xs: "13px", md: "14px" },
+              maxWidth: "800px",
+            }}
+          >
             What GPT Model do you want to use for this Well? AI output and costs
             are going to change based on this choice.
           </Box>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Box sx={{ display: "flex", gap: "5px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: "5px",
+              alignItems: "center",
+              margin: "0 auto 0 auto",
+            }}
+          >
             <Box
               sx={{
                 height: "100%",
@@ -195,7 +232,14 @@ export const CreateWellPage = ({ setOpen }: CreateWellPageProps) => {
               onChange={() => setModel("gpt-3.5-turbo-1106")}
             />
           </Box>
-          <Box sx={{ display: "flex", gap: "5px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: "5px",
+              alignItems: "center",
+              margin: "0 auto 0 auto",
+            }}
+          >
             <Box
               sx={{
                 height: "100%",

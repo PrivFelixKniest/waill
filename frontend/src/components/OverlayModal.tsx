@@ -26,8 +26,9 @@ export const OverlayModal = ({
           backgroundColor: LIGHTSAND,
           padding: "15px",
           borderRadius: "15px",
-          maxHeight: { xs: "98vh", sm: "90vh", md: "80vh" },
-          maxWidth: { xs: "98vw", sm: "90vw", md: "80vw" },
+          width: { xs: "95vw", sm: "unset", md: "unset" },
+          maxHeight: { xs: "95vh", sm: "90vh", md: "80vh" },
+          maxWidth: { xs: "95vw", sm: "90vw", md: "80vw" },
           overflowY: "scroll",
         }}
       >
