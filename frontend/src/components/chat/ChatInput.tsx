@@ -20,21 +20,17 @@ import { getRun, postQuery } from "../../api/messages";
 import { useAuth0 } from "@auth0/auth0-react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { Creator, runType, wellType } from "../../types/chat";
+import { Creator, runType } from "../../types/chat";
 import {
   addMessageToWell,
   setPromptLoadingWellIdWellId,
-  setWells,
 } from "../../redux/slices/chatSlice";
-import { time } from "console";
 
 const Textarea = styled(BaseTextareaAutosize)(
   ({ theme }) => `
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 0.875rem;
   font-weight: 400;
   line-height: 1.5;
-  padding: 12px 17px;
   border-radius: 10px 5px 5px 10px;
   color: ${DARKTEAL};
   background: ${LIGHTTEAL};
@@ -234,7 +230,7 @@ export const ChatInput = () => {
         sx={{
           marginLeft: "auto",
           marginRight: "auto",
-          minWidth: "60%",
+          minWidth: { xs: "100%", sm: "80%", lg: "60%" },
           display: "flex",
           gap: "4px",
         }}
@@ -259,8 +255,10 @@ export const ChatInput = () => {
               }
             }
           }}
-          style={{
+          sx={{
             width: "calc(100% - 44px)",
+            fontSize: { xs: "13px", sm: "14px" },
+            padding: { xs: "6px 8px", md: "12px 17px" },
           }}
         />
         <button

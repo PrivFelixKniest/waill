@@ -4,6 +4,7 @@ import { Box, IconButton, Tooltip } from "@mui/material";
 import { DARKTEAL, LIGHTTEAL, SAND } from "../colors";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { OverlayModal } from "./OverlayModal";
@@ -17,6 +18,7 @@ import {
 } from "../redux/slices/chatSlice";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
+import { topbarHeight } from "../pages/Chat";
 
 interface WellsBarProps {
   wellsLoading: boolean;
@@ -24,6 +26,7 @@ interface WellsBarProps {
 
 export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
   const dispatch = useDispatch();
+  const [mobileExpanded, setMobileExpanded] = useState(false);
   const [openCreateWell, setOpenCreateWell] = useState(false);
   const [deleteWellLoading, setDeleteWellLoading] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
@@ -79,19 +82,66 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
   return (
     <Box
       sx={{
-        width: "250px",
-        height: "100%",
+        width: { xs: "100vw", md: "250px" },
+        height: { xs: `calc(100vh - ${topbarHeight})`, md: "unset" },
+        position: { xs: "absolute", md: "unset" },
+        transform: {
+          xs: mobileExpanded ? "translateX(0px)" : "translateX(100%)",
+          md: "unset",
+        },
+        transition: "transform .2s ease",
         backgroundColor: SAND,
+        zIndex: mobileExpanded ? "2" : "1",
       }}
     >
-      <Box sx={{ padding: "20px" }}>
-        <Box sx={{ fontSize: "20px", marginBottom: "20px" }}>Wells</Box>
+      <Box
+        sx={{
+          padding: "20px",
+          position: "relative",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "3px",
+            left: mobileExpanded ? "3px" : "-43px",
+          }}
+        >
+          <IconButton
+            sx={{ display: { xs: "static", md: "none" } }}
+            onClick={() => {
+              setMobileExpanded((prev) => !prev);
+            }}
+          >
+            <KeyboardArrowRightRoundedIcon
+              sx={{
+                transform: mobileExpanded ? "rotate(0deg)" : "rotate(180deg)",
+                transition: "transform .2s ease ",
+              }}
+            />
+          </IconButton>
+        </Box>
+        <Box
+          sx={{
+            fontSize: "20px",
+            marginBottom: "20px",
+            textAlign: { xs: "center", md: "left" },
+          }}
+        >
+          Wells
+        </Box>
         {wellsLoading ? (
           <Box sx={{ width: "100%", textAlign: "center" }}>
             Loading Wells...
           </Box>
         ) : (
-          <Box>
+          <Box
+            sx={{
+              height: "calc(100% - 46px)",
+              overflowY: "scroll",
+              overflowX: "hidden",
+            }}
+          >
             {wells.map((well) => {
               return (
                 <Tooltip

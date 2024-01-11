@@ -5,7 +5,11 @@ import { ChatMessage } from "./ChatMessage";
 import { Creator, messageType } from "../../types/chat";
 import { ChatMessageWriting } from "./ChatMessageWriting";
 
-export const ChatMessages = () => {
+interface ChatMessagesProps {
+  wellsLoading: boolean;
+}
+
+export const ChatMessages = ({ wellsLoading }: ChatMessagesProps) => {
   const { wells, selectedWellId, promptLoadingWellId } = useSelector(
     (state: RootState) => state.chat
   );
@@ -21,8 +25,9 @@ export const ChatMessages = () => {
             transform: "translate(-50%,-50%)",
           }}
         >
-          Please create a Well on the right side in order to start asking
-          questions!
+          {wellsLoading
+            ? "Loading Wells..."
+            : "Create a Well on the right side in order to start using Waill!"}
         </Box>
       </Box>
     );

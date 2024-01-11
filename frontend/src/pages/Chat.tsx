@@ -17,15 +17,17 @@ import { WellsBar } from "../components/WellsBar";
 import { getWells } from "../api/wells";
 import { fileType, wellRepsonseType, wellType } from "../types/chat";
 import { getFiles } from "../api/files";
+import { setAuthToken } from "../api/authToken";
+import CircularProgress from "@mui/material/CircularProgress";
+
+export const topbarHeight = "50px";
+const chatInputHeight = "80px";
 
 function Chat() {
   const dispatch = useDispatch();
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
   const [userLoading, setUserLoading] = useState(true);
   const [wellsLoading, setWellsLoading] = useState(true);
-
-  const topbarHeight = "50px";
-  const chatInputHeight = "80px";
 
   useEffect(() => {
     if (!isLoading) {
@@ -35,6 +37,7 @@ function Chat() {
         setUserLoading(true);
         getAccessTokenSilently()
           .then((authToken: string) => {
+            setAuthToken(authToken);
             // token is not yet valid error (iat)
             setTimeout(() => {
               getUser(authToken)
@@ -114,6 +117,7 @@ function Chat() {
           height: "100vh",
           position: "relative",
           backgroundColor: "#fef6ea",
+          color: DARKTEAL,
         }}
       >
         <div
@@ -124,7 +128,24 @@ function Chat() {
             transform: "translate(-50%, -50%)",
           }}
         >
-          Authenticating ...
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <CircularProgress
+              color="inherit"
+              sx={{
+                color: DARKTEAL,
+              }}
+            />
+          </Box>
+          <Box sx={{ textAlign: "center" }}>Authenticating</Box>
+          <Box sx={{ opacity: "0.6", fontSize: "14px", textAlign: "center" }}>
+            We are authenticating your login Information!
+          </Box>
         </div>
       </Box>
     );
@@ -146,9 +167,28 @@ function Chat() {
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
+            color: DARKTEAL,
           }}
         >
-          Loading User Data...
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: "10px",
+            }}
+          >
+            <CircularProgress
+              color="inherit"
+              sx={{
+                color: DARKTEAL,
+              }}
+            />
+          </Box>
+          <Box sx={{ textAlign: "center" }}>Loading User Data</Box>
+          <Box sx={{ opacity: "0.6", fontSize: "14px", textAlign: "center" }}>
+            If we are experiencing higher loads than usual, this initial load
+            might take up to a minute.
+          </Box>
         </div>
       </Box>
     );
@@ -160,6 +200,7 @@ function Chat() {
         width: "100vw",
         maxWidth: "100vw",
         height: "100vh",
+        overflow: "hidden",
         maxHeight: "100vh",
         position: "relative",
         display: "flex",
@@ -175,7 +216,7 @@ function Chat() {
               backgroundColor: LIGHTTEAL,
               padding: "5px 15px",
               display: "flex",
-              gap: "10px",
+              gap: { xs: "6px", sm: "10px" },
               justifyContent: "center",
               borderBottom: `2px solid ${DARKTEAL}`,
             }}
@@ -183,7 +224,7 @@ function Chat() {
             <Box
               sx={{
                 fontWeight: "bold",
-                fontSize: "23px",
+                fontSize: { xs: "16px", sm: "23px" },
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -194,7 +235,7 @@ function Chat() {
             </Box>
             <Box
               sx={{
-                fontSize: "20px",
+                fontSize: { xs: "14px", sm: "20px" },
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -217,14 +258,14 @@ function Chat() {
                 padding: "20px",
                 paddingTop: "0px",
                 display: "flex",
-                width: "calc(100% - 500px)",
+                width: { xs: "100vw", md: "calc(100% - 500px)" },
                 flexDirection: "column",
                 justifyContent: "flex-end",
                 maxHeight: "100%",
               }}
             >
               <Box sx={{ height: `calc(100% - ${chatInputHeight})` }}>
-                <ChatMessages />
+                <ChatMessages wellsLoading={wellsLoading} />
               </Box>
               <Box
                 sx={{

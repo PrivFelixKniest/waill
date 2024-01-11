@@ -50,7 +50,7 @@ export const SettingsPage = () => {
           }}
           alt="profile"
         />
-        <Box>
+        <Box sx={{ fontSize: { xs: "13px", md: "14px" } }}>
           <Box>Username: {user?.name}</Box>
           <Box>Nickname: {user?.nickname}</Box>
           <Box>Email: {user?.email}</Box>
@@ -62,7 +62,7 @@ export const SettingsPage = () => {
       <Box sx={{ marginBottom: "20px" }}>
         <Box sx={{ marginBottom: "5px" }}>
           <Box>Default OpenAI API Key</Box>
-          <Box sx={{ opacity: ".7", fontSize: "15px", maxWidth: "800px" }}>
+          <Box sx={{ opacity: ".7", fontSize: { xs: "13px", md: "14px" } }}>
             This key is necessary so that this application is able to connect to
             your OpenAI account and use your GPT Access. For the same reason you
             will be able to see your billing information inside the OpenAI
@@ -85,7 +85,7 @@ export const SettingsPage = () => {
             not using Waill.
           </Box>
         </Box>
-        <Box sx={{ width: "100%", display: "flex", gap: "5px" }}>
+        <Box sx={{ display: "flex", gap: "5px" }}>
           <input
             type="password"
             placeholder="sk-..."

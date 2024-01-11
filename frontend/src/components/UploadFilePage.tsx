@@ -26,7 +26,9 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
   const dispatch = useDispatch();
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [deleteFileLoading, setDeleteFileLoading] = useState(false);
+  const [deleteFileLoading, setDeleteFileLoading] = useState<null | number>(
+    null
+  );
   const selectedWellId = useSelector(
     (state: RootState) => state.chat.selectedWellId
   );
@@ -81,7 +83,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
   };
 
   const handleDelete = (fileId: number) => {
-    setDeleteFileLoading(true);
+    setDeleteFileLoading(fileId);
     getAccessTokenSilently()
       .then((authToken: string) => {
         if (selectedWellId) {
@@ -90,22 +92,22 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
               dispatch(
                 removeFileFromWell({ wellId: selectedWellId, file: fileResp })
               );
-              setDeleteFileLoading(false);
+              setDeleteFileLoading(null);
               toast.success("Successfully deleted a file");
             })
             .catch((err: AxiosError) => {
-              setDeleteFileLoading(false);
+              setDeleteFileLoading(null);
               toast.error(
                 "Something went wrong trying to delete a file, please try again later."
               );
             });
         } else {
-          setDeleteFileLoading(false);
+          setDeleteFileLoading(null);
           toast.warning("No Well is selected while trying to delete a file.");
         }
       })
       .catch((err: any) => {
-        setDeleteFileLoading(false);
+        setDeleteFileLoading(null);
         toast.error(
           "There was an error getting your authorization token, please try again later."
         );
@@ -158,7 +160,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
                     gap: "5px",
                   }}
                 >
-                  <Box>
+                  <Box sx={{ fontSize: { xs: "13px", sm: "14px" } }}>
                     <Box sx={{ width: "100%", textAlign: "center" }}>
                       {file.file_name}
                     </Box>
@@ -180,14 +182,15 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
                     <Box>
                       <IconButton
                         sx={{
-                          height: "100%",
+                          height: { xs: "36px", sm: "40px" },
+                          width: { xs: "36px", sm: "40px" },
                           marginTop: "auto",
                           marginBottom: "auto",
                         }}
                         onClick={() => handleDelete(file.id)}
-                        disabled={deleteFileLoading}
+                        disabled={deleteFileLoading !== null}
                       >
-                        {deleteFileLoading ? (
+                        {deleteFileLoading === file.id ? (
                           <Box
                             sx={{
                               width: "24px",
@@ -259,7 +262,7 @@ export const UploadFilePage = ({ setOpen }: UploadFilePageProps) => {
         {file && <Box sx={{ lineHeight: "31px" }}>{file.name}</Box>}
       </Box>
 
-      <Box>
+      <Box sx={{ fontSize: { xs: "13px", md: "14px" } }}>
         <Box sx={{ marginBottom: "5px" }}>
           OpenAI allows each Assistant to carry up to 20 files of up to 512 MBs
           each, with the default configuration. For more information please

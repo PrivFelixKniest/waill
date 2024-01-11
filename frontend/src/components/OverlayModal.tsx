@@ -1,7 +1,7 @@
 import { Dispatch, ReactElement, SetStateAction } from "react";
 
 import { Box, IconButton, Modal } from "@mui/material";
-import { DARKTEAL, LIGHTSAND, LIGHTTEAL } from "../colors";
+import { DARKTEAL, LIGHTSAND } from "../colors";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 interface OverlayModalProps {
@@ -26,8 +26,8 @@ export const OverlayModal = ({
           backgroundColor: LIGHTSAND,
           padding: "15px",
           borderRadius: "15px",
-          maxHeight: "80vh",
-          maxWidth: "80vw",
+          maxHeight: { xs: "98vh", sm: "90vh", md: "80vh" },
+          maxWidth: { xs: "98vw", sm: "90vw", md: "80vw" },
           overflowY: "scroll",
         }}
       >

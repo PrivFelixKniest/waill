@@ -21,8 +21,12 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
     >
       <Box
         sx={{
-          marginLeft: message.creator === "assistant" ? "0px" : "100px",
-          marginRight: message.creator === "user" ? "0px" : "100px",
+          marginLeft:
+            message.creator === "assistant"
+              ? "0px"
+              : { xs: "40px", md: "70px" },
+          marginRight:
+            message.creator === "user" ? "0px" : { xs: "40px", md: "70px" },
           marginTop: "20px",
         }}
       >
@@ -33,12 +37,14 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
             gap: "11px",
           }}
         >
-          <Box sx={{ fontWeight: "bold" }}>
+          <Box
+            sx={{ fontWeight: "bold", fontSize: { xs: "14px", sm: "16px" } }}
+          >
             {message.creator === "user" ? "You" : "Bucket"}
           </Box>
           <Box
             sx={{
-              fontSize: "14px",
+              fontSize: { xs: "13px", sm: "14px" },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -69,6 +75,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
             marginLeft: message.creator === "user" ? "auto" : "",
             marginRight: message.creator === "assistant" ? "auto" : "",
             width: "fit-content",
+            fontSize: { xs: "13px", sm: "14px" },
           }}
         >
           {message.content.split("\n").map((paragraph: string, idx) => {
