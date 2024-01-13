@@ -3,6 +3,7 @@ import { DARKTEAL } from "../colors";
 import { useAuth0 } from "@auth0/auth0-react";
 import { postOpenaiKey } from "../api/userInformation";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { setOpenaiKey } from "../redux/slices/chatSlice";
@@ -73,7 +74,6 @@ export const SettingsPage = () => {
               href="https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwj4kJX1q5-DAxUmnf0HHWeNBXYQFnoECA4QAw&url=https%3A%2F%2Fplatform.openai.com%2Fdocs%2Fquickstart%23%3A~%3Atext%3DFirst%252C%2520create%2520an%2520OpenAI%2520account%2Cnot%2520share%2520it%2520with%2520anyone.&usg=AOvVaw3lfqD91hEjFi8wl23Wjphg&opi=89978449"
               target="_blank"
               rel="noreferrer"
-              className="App-link"
             >
               here
             </a>
@@ -106,11 +106,13 @@ export const SettingsPage = () => {
 
       <button
         className="secondary-button-small"
+        style={{ display: "flex", gap: "5px", alignItems: "center" }}
         onClick={() =>
           logout({ logoutParams: { returnTo: window.location.origin } })
         }
       >
-        Sign Out
+        <LogoutRoundedIcon />
+        <Box>Sign Out</Box>
       </button>
     </Box>
   );

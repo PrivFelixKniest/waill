@@ -6,7 +6,7 @@
   background-color: #fef3df;
   min-height: 100vh;
   max-width: 1200px;
-  min-width: 100vw;
+  min-width: 100%;
   font-size: calc(10px + 2vmin);
   color: white;
   position: relative;
@@ -136,12 +136,31 @@
   cursor: unset;
 }
 
-.highlighted-text {
+.navigation-button {
+  display: flex;
+  justify-content: flex-start;
+  gap: 5px;
+  padding: 10px 20px 10px 20px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
   color: #277888;
+  transition: background-color 0.1s linear;
+  cursor: pointer;
+  border: none;
+  font-family: "DMSans";
+  text-decoration: none;
+  font-size: 18px;
+}
+.navigation-button:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+.navigation-button:disabled {
+  background-color: rgba(0, 0, 0, 0.02);
+  cursor: unset;
 }
 
-.App-link {
-  color: #091f25;
+.highlighted-text {
+  color: #277888;
 }
 
 .profile-button {
@@ -320,5 +339,28 @@
   .secondary-button {
     padding: 5px 10px 5px 10px;
     font-size: 15px;
+  }
+}
+
+@keyframes appear-enter {
+  0% {
+    opacity: 0;
+    transform: scale(0.9, 0.9);
+  }
+  50% {
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+
+.animate {
+  visibility: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .appear-animation {
+    animation: appear-enter ease 1s 1;
   }
 }

@@ -8,11 +8,17 @@ input {
   box-sizing: border-box;
 }
 
+a {
+  color: #091f25;
+}
+
 body {
   margin: 0;
   font-family: "DMSans";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #fff0da;
+  color: #277888;
 }
 
 code {

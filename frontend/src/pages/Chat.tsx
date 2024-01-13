@@ -98,7 +98,7 @@ function Chat() {
                     "There was an error fetching your user data, please try again."
                   );
                 });
-            }, 2000);
+            }, 5000);
           })
           .catch((err: any) => {
             toast.error(

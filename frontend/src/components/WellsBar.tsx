@@ -98,6 +98,7 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
         sx={{
           padding: "20px",
           position: "relative",
+          height: "calc(100% - 46px)",
         }}
       >
         <Box
@@ -137,7 +138,7 @@ export const WellsBar = ({ wellsLoading }: WellsBarProps) => {
         ) : (
           <Box
             sx={{
-              height: "calc(100% - 46px)",
+              height: "100%",
               overflowY: "scroll",
               overflowX: "hidden",
             }}

@@ -7,6 +7,9 @@ import { OverlayModal } from "./OverlayModal";
 import { SettingsPage } from "./SettingsPage";
 import { useAuth0 } from "@auth0/auth0-react";
 import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRightRounded";
+import ChatRoundedIcon from "@mui/icons-material/ChatRounded";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { topbarHeight } from "../pages/Chat";
 
 export const Sidebar = () => {
@@ -14,6 +17,8 @@ export const Sidebar = () => {
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   const [openSettings, setOpenSettings] = useState(false);
+
+  const { logout } = useAuth0();
 
   return (
     <Box
@@ -59,63 +64,133 @@ export const Sidebar = () => {
             />
           </IconButton>
         </Box>
-        <Box sx={{ padding: "20px", flexGrow: "1" }}>Sidebar</Box>
         <Box
           sx={{
-            borderTop: "2px solid " + DARKTEAL,
+            padding: "20px",
+            flexGrow: "1",
           }}
         >
-          <button
-            className="profile-button"
-            type="button"
-            onClick={() => setOpenSettings(true)}
+          <Box
+            sx={{
+              fontSize: "20px",
+              marginBottom: "20px",
+              textAlign: { xs: "center", md: "left" },
+            }}
           >
-            <img
-              src={user?.picture}
+            Navigation
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "5px",
+            }}
+          >
+            <a className="navigation-button" href="/">
+              <HomeRoundedIcon />
+              Home
+            </a>
+            <a className="navigation-button" href="/chat">
+              <ChatRoundedIcon />
+              Chat
+            </a>
+            <button
+              className="navigation-button"
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+            >
+              <LogoutRoundedIcon />
+              Sign Out
+            </button>
+          </Box>
+        </Box>
+        <Box>
+          <Box
+            sx={{
+              width: "100%",
+              opacity: ".7",
+              fontSize: "13px",
+              padding: "5px",
+            }}
+          >
+            By using Waill you accept our{" "}
+            <a
+              href="/privacy"
               style={{
-                minHeight: "40px",
-                minWidth: "40px",
-                maxHeight: "40px",
-                maxWidth: "40px",
-                borderRadius: "50%",
-              }}
-              alt="profile"
-            />
-            <Box
-              sx={{
-                overflow: "hidden",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                fontSize: "16px",
-                lineHeight: "16px",
+                color: DARKTEAL,
               }}
             >
-              {user?.nickname}
-              <br />
-              <span style={{ opacity: ".8" }}>{user?.name}</span>
-            </Box>
-            <Box
-              sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
+              privacy policy
+            </a>{" "}
+            and our{" "}
+            <a
+              href="/terms"
+              style={{
+                color: DARKTEAL,
               }}
-              className="settings-wheel"
             >
-              <SettingsRoundedIcon
-                sx={{
-                  height: "30px",
-                  width: "30px",
+              terms of service
+            </a>
+            .
+          </Box>
+          <Box
+            sx={{
+              borderTop: "2px solid " + DARKTEAL,
+            }}
+          >
+            <button
+              className="profile-button"
+              type="button"
+              onClick={() => setOpenSettings(true)}
+            >
+              <img
+                src={user?.picture}
+                style={{
+                  minHeight: "40px",
+                  minWidth: "40px",
+                  maxHeight: "40px",
+                  maxWidth: "40px",
+                  borderRadius: "50%",
                 }}
+                alt="profile"
               />
-            </Box>
-          </button>
-          <OverlayModal open={openSettings} setOpen={setOpenSettings}>
-            <SettingsPage />
-          </OverlayModal>
+              <Box
+                sx={{
+                  overflow: "hidden",
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  fontSize: "16px",
+                  lineHeight: "16px",
+                }}
+              >
+                {user?.nickname}
+                <br />
+                <span style={{ opacity: ".8" }}>{user?.name}</span>
+              </Box>
+              <Box
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+                className="settings-wheel"
+              >
+                <SettingsRoundedIcon
+                  sx={{
+                    height: "30px",
+                    width: "30px",
+                  }}
+                />
+              </Box>
+            </button>
+            <OverlayModal open={openSettings} setOpen={setOpenSettings}>
+              <SettingsPage />
+            </OverlayModal>
+          </Box>
         </Box>
       </Box>
     </Box>
