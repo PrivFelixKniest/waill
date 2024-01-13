@@ -186,7 +186,7 @@ function Chat() {
           </Box>
           <Box sx={{ textAlign: "center" }}>Loading User Data</Box>
           <Box sx={{ opacity: "0.6", fontSize: "14px", textAlign: "center" }}>
-            If we are experiencing higher loads than usual, this initial load
+            If we are experiencing more traffic than usual, this initial load
             might take up to a minute.
           </Box>
         </div>
