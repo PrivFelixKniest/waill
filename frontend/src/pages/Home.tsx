@@ -12,11 +12,11 @@ const imageData = [
     title: "chat input",
   },
   {
-    img: "chatScreenshots/account settings.png",
+    img: "chatScreenshots/account-settings.png",
     title: "account settings",
   },
   {
-    img: "chatScreenshots/navigation.png",
+    img: "chatScreenshots/navigation-tab.png",
     title: "navigation",
   },
   {
@@ -312,19 +312,26 @@ function Home() {
                 </Box>
                 <Box sx={{ maxWidth: "500px", opacity: "0.7" }}>
                   <p>
-                    Create an account or log into your OpenAI account and go to
-                    the API page in order to generate a new key in the "API
-                    Keys" tab.
+                    Create an account or log into your{" "}
+                    <a
+                      href="https://openai.com"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      OpenAI account
+                    </a>{" "}
+                    and go to the API page in order to generate a new key in the
+                    "API Keys" tab.
                   </p>
                   <p>
                     Afterwards, make sure that your account has access to at
                     least a small amount of money ($5 USD is the lowest accepted
-                    amount as of janurary 2024), so that your requests will be
-                    processed properly later. You can add to your Balance under
+                    amount as of Janurary 2024), so that your requests will be
+                    processed properly later. You can add to your balance under
                     Settings / Billing.
                   </p>
                   <p>
-                    Save this Key securely and open the account settings in the
+                    Save this key securely and open the account settings in the
                     Waill app, by clicking on your profile in the bottom left of
                     the screen.
                   </p>
