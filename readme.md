@@ -6,7 +6,7 @@ Waill (Well AI) is a platform for retrieving information from documents with the
 
 ## Usage
 
-To see a running, up to date version of this codebase visit https://waill.net
+To see a running, up to date version of this codebase visit https://waill.net. Please take note that using all of waills features will require you to connect an OpenAI account with some budget to spend.
 
 ## Overview
 
