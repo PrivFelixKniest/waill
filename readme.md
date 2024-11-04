@@ -3,6 +3,11 @@
 ## Description
 
 Waill (Well AI) is a platform for retrieving information from documents using the OpenAI API. It uses a React Frontend, a FastAPI Backend, the OpenAI SDK, Auth0 for authentification, and a Relational Database (PostgreSQL) with sqlalchemy. 
+![image](https://github.com/user-attachments/assets/b32406d1-8681-467b-811c-059eed536962)
+
+![image](https://github.com/user-attachments/assets/4f16c7ae-c9fe-48ae-8aa3-3406d85f0594)
+
+![image](https://github.com/user-attachments/assets/c1832c7a-52c7-4994-8c05-b1fc8988e654)
 
 ## Usage
 
